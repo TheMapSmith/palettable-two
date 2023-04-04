@@ -14,15 +14,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 col.style.backgroundColor = color;
                 col.textContent = color;
                 col.dataset.index = index;
-                col.addEventListener('click', function () {
+                const lockBtn = document.createElement('img');
+                lockBtn.src = 'fa-lock.svg';
+                lockBtn.className = 'lock-btn';
+                lockBtn.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Prevent event propagation to the parent element
                     if (col.getAttribute('data-locked') === "true") {
                         col.removeAttribute('data-locked');
-                        col.classList.remove('locked');
+                        lockBtn.style.opacity = '0';
                     } else {
                         col.setAttribute('data-locked', 'true');
-                        col.classList.add('locked');
+                        lockBtn.style.opacity = '1';
                     }
-                });                
+                });
+                col.appendChild(lockBtn);
+                             
                 palette.appendChild(col);
             });
         } else {

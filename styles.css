@@ -22,3 +22,22 @@ body {
 .locked {
     opacity: 0.5;
 }
+
+.lock-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.col:hover .lock-btn {
+    opacity: 0.5;
+}
+
+.col[data-locked] .lock-btn {
+    opacity: 1;
+}
