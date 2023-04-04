@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateBtn = document.getElementById('generate');
     generateBtn.addEventListener('click', generatePalette);
+    generatePalette();
 
     function generatePalette() {
         const palette = document.getElementById('palette');
