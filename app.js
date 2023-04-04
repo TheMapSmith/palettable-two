@@ -7,40 +7,52 @@ document.addEventListener('DOMContentLoaded', function () {
         const palette = document.getElementById('palette');
         const colors = generateRandomColors(5);
     
-        if (palette.childElementCount === 0) {
-            colors.forEach((color, index) => {
-                const col = document.createElement('div');
-                col.className = 'col';
-                col.style.backgroundColor = color;
-                col.textContent = color;
-                col.dataset.index = index;
-                const lockBtn = document.createElement('img');
-                lockBtn.src = 'fa-lock.svg';
-                lockBtn.className = 'lock-btn';
-                lockBtn.addEventListener('click', function (event) {
-                    event.stopPropagation(); // Prevent event propagation to the parent element
-                    if (col.getAttribute('data-locked') === "true") {
-                        col.removeAttribute('data-locked');
-                        lockBtn.style.opacity = '0';
-                    } else {
-                        col.setAttribute('data-locked', 'true');
-                        lockBtn.style.opacity = '1';
-                    }
-                });
-                col.appendChild(lockBtn);
-                             
-                palette.appendChild(col);
-            });
-        } else {
-            const cols = palette.querySelectorAll('.col');
-            cols.forEach((col, index) => {
-                if (col.getAttribute('data-locked') !== "true") {
-                    const newColor = colors[index];
-                    col.style.backgroundColor = newColor;
-                    col.textContent = newColor;
+        const newPalette = document.createElement('div');
+        newPalette.className = 'row mt-4';
+    
+        colors.forEach((color, index) => {
+            const existingCol = palette.querySelector(`.col[data-index="${index}"]`);
+    
+            if (existingCol && existingCol.getAttribute('data-locked') === "true") {
+                newPalette.appendChild(existingCol.cloneNode(true));
+                return;
+            }
+    
+            const col = document.createElement('div');
+            col.className = 'col';
+            col.style.backgroundColor = color;
+            col.textContent = color;
+            col.dataset.index = index;
+            col.addEventListener('click', function () {
+                if (col.getAttribute('data-locked') === "true") {
+                    col.removeAttribute('data-locked');
+                    col.querySelector('.lock-btn').style.opacity = '0';
+                } else {
+                    col.setAttribute('data-locked', 'true');
+                    col.querySelector('.lock-btn').style.opacity = '1';
                 }
             });
-        }
+    
+            const lockBtn = document.createElement('img');
+            lockBtn.src = 'fa-lock.svg';
+            lockBtn.className = 'lock-btn';
+            lockBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                if (col.getAttribute('data-locked') === "true") {
+                    col.removeAttribute('data-locked');
+                    lockBtn.style.opacity = '0';
+                } else {
+                    col.setAttribute('data-locked', 'true');
+                    lockBtn.style.opacity = '1';
+                }
+            });
+    
+            col.appendChild(lockBtn);
+            newPalette.appendChild(col);
+        });
+    
+        palette.replaceWith(newPalette);
+        newPalette.id = 'palette';
     }
     
 
