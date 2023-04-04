@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
             col.className = 'col';
             col.style.backgroundColor = color;
             col.textContent = color;
+            col.addEventListener('click', function () {
+                copyToClipboard(color);
+            });
             palette.appendChild(col);
         });
     }
@@ -31,5 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
+    }
+
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('Color copied to clipboard: ' + text);
     }
 });
