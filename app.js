@@ -6,19 +6,35 @@ document.addEventListener('DOMContentLoaded', function () {
     function generatePalette() {
         const palette = document.getElementById('palette');
         const colors = generateRandomColors(5);
-
-        palette.innerHTML = '';
-        colors.forEach(color => {
-            const col = document.createElement('div');
-            col.className = 'col';
-            col.style.backgroundColor = color;
-            col.textContent = color;
-            col.addEventListener('click', function () {
-                copyToClipboard(color);
+    
+        if (palette.childElementCount === 0) {
+            colors.forEach((color, index) => {
+                const col = document.createElement('div');
+                col.className = 'col';
+                col.style.backgroundColor = color;
+                col.textContent = color;
+                col.dataset.index = index;
+                col.addEventListener('click', function () {
+                    if (col.getAttribute('data-locked') === "true") {
+                        col.removeAttribute('data-locked');
+                    } else {
+                        col.setAttribute('data-locked', 'true');
+                    }
+                });
+                palette.appendChild(col);
             });
-            palette.appendChild(col);
-        });
+        } else {
+            const cols = palette.querySelectorAll('.col');
+            cols.forEach((col, index) => {
+                if (col.getAttribute('data-locked') !== "true") {
+                    const newColor = colors[index];
+                    col.style.backgroundColor = newColor;
+                    col.textContent = newColor;
+                }
+            });
+        }
     }
+    
 
     function generateRandomColors(num) {
         const colors = [];
