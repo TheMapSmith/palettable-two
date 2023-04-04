@@ -14,7 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const existingCol = palette.querySelector(`.col[data-index="${index}"]`);
     
             if (existingCol && existingCol.getAttribute('data-locked') === "true") {
-                newPalette.appendChild(existingCol.cloneNode(true));
+                const lockedCol = existingCol.cloneNode(true);
+                lockedCol.addEventListener('click', toggleLockedState);
+                lockedCol.querySelector('.lock-btn').addEventListener('click', toggleLockButton);
+                newPalette.appendChild(lockedCol);
                 return;
             }
     
@@ -23,29 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
             col.style.backgroundColor = color;
             col.textContent = color;
             col.dataset.index = index;
-            col.addEventListener('click', function () {
-                if (col.getAttribute('data-locked') === "true") {
-                    col.removeAttribute('data-locked');
-                    col.querySelector('.lock-btn').style.opacity = '0';
-                } else {
-                    col.setAttribute('data-locked', 'true');
-                    col.querySelector('.lock-btn').style.opacity = '1';
-                }
-            });
+            col.addEventListener('click', toggleLockedState);
     
             const lockBtn = document.createElement('img');
             lockBtn.src = 'fa-lock.svg';
             lockBtn.className = 'lock-btn';
-            lockBtn.addEventListener('click', function (event) {
-                event.stopPropagation();
-                if (col.getAttribute('data-locked') === "true") {
-                    col.removeAttribute('data-locked');
-                    lockBtn.style.opacity = '0';
-                } else {
-                    col.setAttribute('data-locked', 'true');
-                    lockBtn.style.opacity = '1';
-                }
-            });
+            lockBtn.addEventListener('click', toggleLockButton);
     
             col.appendChild(lockBtn);
             newPalette.appendChild(col);
@@ -53,7 +39,32 @@ document.addEventListener('DOMContentLoaded', function () {
     
         palette.replaceWith(newPalette);
         newPalette.id = 'palette';
+    
+        function toggleLockedState(event) {
+            const col = event.currentTarget;
+            if (col.getAttribute('data-locked') === "true") {
+                col.removeAttribute('data-locked');
+                col.querySelector('.lock-btn').style.opacity = '0';
+            } else {
+                col.setAttribute('data-locked', 'true');
+                col.querySelector('.lock-btn').style.opacity = '1';
+            }
+        }
+    
+        function toggleLockButton(event) {
+            event.stopPropagation();
+            const lockBtn = event.currentTarget;
+            const col = lockBtn.parentElement;
+            if (col.getAttribute('data-locked') === "true") {
+                col.removeAttribute('data-locked');
+                lockBtn.style.opacity = '0';
+            } else {
+                col.setAttribute('data-locked', 'true');
+                lockBtn.style.opacity = '1';
+            }
+        }
     }
+    
     
 
     function generateRandomColors(num) {
