@@ -17,10 +17,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 col.addEventListener('click', function () {
                     if (col.getAttribute('data-locked') === "true") {
                         col.removeAttribute('data-locked');
+                        col.classList.remove('locked');
                     } else {
                         col.setAttribute('data-locked', 'true');
+                        col.classList.add('locked');
                     }
-                });
+                });                
                 palette.appendChild(col);
             });
         } else {
