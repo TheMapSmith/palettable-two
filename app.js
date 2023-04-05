@@ -134,8 +134,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.getElementById('add-color').addEventListener('click', function () {
-        const numColors = document.getElementById('palette').querySelectorAll('.col').length;
-        generateColors(numColors + 1);
+        const palette = document.getElementById('palette');
+        const numColors = palette.querySelectorAll('.col').length;
+        const newColor = generateRandomColors(1)[0]; // Generate a single new color
+    
+        const newColors = Array.from(palette.querySelectorAll('.col')).map(col => col.textContent).concat(newColor);
+        generatePalette(newColors);
     });
+    
     
 });
