@@ -84,7 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
         let newIndex = 0;
     
         for (let i = 0; i < numColors; i++) {
-            if (lockedColors.includes(palette.querySelector(`.col[data-index="${i}"]`).textContent)) {
+            const existingCol = palette.querySelector(`.col[data-index="${i}"]`);
+            if (existingCol && lockedColors.includes(existingCol.textContent)) {
                 colors.push(lockedColors[lockedIndex++]);
             } else {
                 colors.push(newColors[newIndex++]);
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         generatePalette(colors);
     }
+    
     
 
     function generateRandomColors(num) {
