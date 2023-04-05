@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateBtn = document.getElementById('generate');
     generateBtn.addEventListener('click', generatePalette);
-    generatePalette();
+    generatePalette(5);
 
-    function generatePalette() {
+    function generatePalette(numColors) {
         const palette = document.getElementById('palette');
-        const colors = generateRandomColors(5);
+        const colors = generateRandomColors(numColors);
     
         const newPalette = document.createElement('div');
         newPalette.className = 'row mt-4';
@@ -35,6 +35,18 @@ document.addEventListener('DOMContentLoaded', function () {
     
             col.appendChild(lockBtn);
             newPalette.appendChild(col);
+
+            const trashBtn = document.createElement('img');
+
+            trashBtn.src = 'fa-trash-can.svg';
+            trashBtn.className = 'trash-btn';
+            trashBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                col.remove();
+                const numColors = document.getElementById('palette').querySelectorAll('.col').length;
+                generatePalette(numColors);
+            });
+            col.appendChild(trashBtn);
         });
     
         palette.replaceWith(newPalette);
@@ -93,4 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.removeChild(textarea);
         alert('Color copied to clipboard: ' + text);
     }
+
+    document.getElementById('add-color').addEventListener('click', function () {
+        const numColors = document.getElementById('palette').querySelectorAll('.col').length;
+        generatePalette(numColors + 1);
+    });
+    
 });
