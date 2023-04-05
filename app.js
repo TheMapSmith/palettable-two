@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generatePalette(numColors) {
         const palette = document.getElementById('palette');
-        const colors = generateRandomColors(numColors);
+        const colors = generateRandomColors(numColors || palette.querySelectorAll('.col').length);
     
         const newPalette = document.createElement('div');
         newPalette.className = 'row mt-4';
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const lockedCol = existingCol.cloneNode(true);
                 lockedCol.addEventListener('click', toggleLockedState);
                 lockedCol.querySelector('.lock-btn').addEventListener('click', toggleLockButton);
+                lockedCol.querySelector('.trash-btn').addEventListener('click', removeColor);
                 newPalette.appendChild(lockedCol);
                 return;
             }
@@ -33,20 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
             lockBtn.className = 'lock-btn';
             lockBtn.addEventListener('click', toggleLockButton);
     
-            col.appendChild(lockBtn);
-            newPalette.appendChild(col);
-
             const trashBtn = document.createElement('img');
-
             trashBtn.src = 'fa-trash-can.svg';
             trashBtn.className = 'trash-btn';
-            trashBtn.addEventListener('click', function (event) {
-                event.stopPropagation();
-                col.remove();
-                const numColors = document.getElementById('palette').querySelectorAll('.col').length;
-                generatePalette(numColors);
-            });
+            trashBtn.addEventListener('click', removeColor);
+    
+            col.appendChild(lockBtn);
             col.appendChild(trashBtn);
+            newPalette.appendChild(col);
         });
     
         palette.replaceWith(newPalette);
@@ -104,6 +99,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.execCommand('copy');
         document.body.removeChild(textarea);
         alert('Color copied to clipboard: ' + text);
+    }
+
+    function removeColor(event) {
+        event.stopPropagation();
+        const col = event.currentTarget.parentElement;
+        col.remove();
+        const numColors = document.getElementById('palette').querySelectorAll('.col').length;
+        generatePalette(numColors);
     }
 
     document.getElementById('add-color').addEventListener('click', function () {
