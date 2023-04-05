@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     generateBtn.addEventListener('click', generateColors);
     generatePalette(5);
 
-    function generatePalette(numColors) {
+    function generatePalette(colors, preserveLocked = false) {
         const palette = document.getElementById('palette');
             
         const newPalette = document.createElement('div');
@@ -74,7 +74,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     function generateColors(numColors) {
-        const colors = generateRandomColors(numColors || document.getElementById('palette').querySelectorAll('.col').length);
+        const palette = document.getElementById('palette');
+        const lockedColors = Array.from(palette.querySelectorAll('.col[data-locked="true"]')).map(col => col.textContent);
+    
+        const newColors = generateRandomColors(numColors || palette.querySelectorAll('.col').length - lockedColors.length);
+        const colors = [];
+    
+        let lockedIndex = 0;
+        let newIndex = 0;
+    
+        for (let i = 0; i < numColors; i++) {
+            if (lockedColors.includes(palette.querySelector(`.col[data-index="${i}"]`).textContent)) {
+                colors.push(lockedColors[lockedIndex++]);
+            } else {
+                colors.push(newColors[newIndex++]);
+            }
+        }
+    
         generatePalette(colors);
     }
     
@@ -110,9 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.stopPropagation();
         const col = event.currentTarget.parentElement;
         col.remove();
-        const numColors = document.getElementById('palette').querySelectorAll('.col').length;
-        generateColors(numColors);
-    }    
+    }
 
     document.getElementById('add-color').addEventListener('click', function () {
         const numColors = document.getElementById('palette').querySelectorAll('.col').length;
