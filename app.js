@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateBtn = document.getElementById('generate');
-    generateBtn.addEventListener('click', generateColors);
-    generateColors(5); // Moved this line here
+    generateBtn.addEventListener('click', () => {
+        const numColors = document.getElementById('palette').querySelectorAll('.col').length;
+        generateColors(numColors);
+    });
+    generateColors(5);
+
 
     function generatePalette(colors, preserveLocked = false) {
         const palette = document.getElementById('palette');
@@ -74,13 +78,13 @@ document.addEventListener('DOMContentLoaded', function () {
     function generateColors(numColors) {
         const palette = document.getElementById('palette');
         const lockedColors = Array.from(palette.querySelectorAll('.col[data-locked="true"]')).map(col => col.textContent);
-    
+
         const newColors = generateRandomColors(numColors || palette.querySelectorAll('.col').length - lockedColors.length);
         const colors = [];
-    
+
         let lockedIndex = 0;
         let newIndex = 0;
-    
+
         for (let i = 0; i < numColors; i++) {
             const existingCol = palette.querySelector(`.col[data-index="${i}"]`);
             if (existingCol && lockedColors.includes(existingCol.textContent)) {
@@ -89,6 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 colors.push(newColors[newIndex++]);
             }
         }
+
+        generatePalette(colors); // Moved this line here
+        return colors;
     }
     
     
