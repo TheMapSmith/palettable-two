@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateBtn = document.getElementById('generate');
     generateBtn.addEventListener('click', generateColors);
-    generatePalette(5);
+    generateColors(5); // Moved this line here
 
     function generatePalette(colors, preserveLocked = false) {
         const palette = document.getElementById('palette');
             
         const newPalette = document.createElement('div');
         newPalette.className = 'row mt-4';
-
-        generateColors(5);
     
         colors.forEach((color, index) => {
             const existingCol = palette.querySelector(`.col[data-index="${index}"]`);
@@ -91,8 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 colors.push(newColors[newIndex++]);
             }
         }
-    
-        generatePalette(colors);
     }
     
     
