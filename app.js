@@ -1,14 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateBtn = document.getElementById('generate');
-    generateBtn.addEventListener('click', generatePalette);
+    generateBtn.addEventListener('click', generateColors);
     generatePalette(5);
 
     function generatePalette(numColors) {
         const palette = document.getElementById('palette');
-        const colors = generateRandomColors(numColors || palette.querySelectorAll('.col').length);
-    
+            
         const newPalette = document.createElement('div');
         newPalette.className = 'row mt-4';
+
+        generateColors(5);
     
         colors.forEach((color, index) => {
             const existingCol = palette.querySelector(`.col[data-index="${index}"]`);
@@ -72,6 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     
+    function generateColors(numColors) {
+        const colors = generateRandomColors(numColors || document.getElementById('palette').querySelectorAll('.col').length);
+        generatePalette(colors);
+    }
     
 
     function generateRandomColors(num) {
@@ -106,12 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const col = event.currentTarget.parentElement;
         col.remove();
         const numColors = document.getElementById('palette').querySelectorAll('.col').length;
-        generatePalette(numColors);
-    }
+        generateColors(numColors);
+    }    
 
     document.getElementById('add-color').addEventListener('click', function () {
         const numColors = document.getElementById('palette').querySelectorAll('.col').length;
-        generatePalette(numColors + 1);
+        generateColors(numColors + 1);
     });
     
 });
