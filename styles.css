@@ -70,3 +70,8 @@ body {
     border: none;
     background-color: transparent;
 }
+
+.lock-btn,
+.trash-btn {
+    text-shadow: 0 0 3px #ffffff;
+}
